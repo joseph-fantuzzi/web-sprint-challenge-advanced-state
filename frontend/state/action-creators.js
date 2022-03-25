@@ -7,6 +7,7 @@ import {
   SET_QUIZ_INTO_STATE,
   SET_SELECTED_ANSWER,
   SET_INFO_MESSAGE,
+  INPUT_CHANGE,
 } from "./action-types";
 
 export function moveClockwise(nextId) {
@@ -25,7 +26,9 @@ export function setMessage() {}
 
 export function setQuiz() {}
 
-export function inputChange() {}
+export function inputChange(id, value) {
+  return { type: INPUT_CHANGE, payload: { id, value } };
+}
 
 export function resetForm() {}
 
@@ -39,7 +42,7 @@ export function fetchQuiz() {
         dispatch({ type: SET_QUIZ_INTO_STATE, payload: res.data });
       })
       .catch((err) => {
-        console.error(err);
+        dispatch({ type: SET_INFO_MESSAGE, payload: err.response.data.message });
       });
     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
     // On successful GET:
