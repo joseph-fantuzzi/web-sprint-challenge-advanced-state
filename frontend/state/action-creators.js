@@ -23,27 +23,33 @@ export function selectAnswer(answer_id) {
   return { type: SET_SELECTED_ANSWER, payload: answer_id };
 }
 
-export function setMessage() {}
+export function setMessage(payload) {
+  return { type: SET_INFO_MESSAGE, payload: payload };
+}
 
-export function setQuiz() {}
+export function setQuiz(payload) {
+  return { type: SET_QUIZ_INTO_STATE, payload: payload };
+}
 
 export function inputChange(id, value) {
   return { type: INPUT_CHANGE, payload: { id, value } };
 }
 
-export function resetForm() {}
+export function resetForm() {
+  return { type: RESET_FORM };
+}
 
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
-    dispatch({ type: SET_QUIZ_INTO_STATE, payload: null });
+    dispatch(setQuiz(null));
     axios
       .get("http://localhost:9000/api/quiz/next")
       .then((res) => {
-        dispatch({ type: SET_QUIZ_INTO_STATE, payload: res.data });
+        dispatch(setQuiz(res.data));
       })
       .catch((err) => {
-        dispatch({ type: SET_INFO_MESSAGE, payload: err.response.data.message });
+        dispatch(setMessage(err.response.data.message));
       });
     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
     // On successful GET:
@@ -56,11 +62,11 @@ export function postAnswer(quiz_id, answer_id) {
       .post("http://localhost:9000/api/quiz/answer", { quiz_id, answer_id })
       .then((res) => {
         dispatch({ type: SET_SELECTED_ANSWER, payload: null });
-        dispatch({ type: SET_INFO_MESSAGE, payload: res.data.message });
+        dispatch(setMessage(res.data.message));
         dispatch(fetchQuiz());
       })
       .catch((err) => {
-        dispatch({ type: SET_INFO_MESSAGE, payload: err.response.data.message });
+        dispatch(setMessage(err.response.data.message));
       });
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
@@ -77,14 +83,11 @@ export function postQuiz({ newQuestion, newTrueAnswer, newFalseAnswer }) {
         false_answer_text: newFalseAnswer,
       })
       .then((res) => {
-        dispatch({
-          type: SET_INFO_MESSAGE,
-          payload: `Congrats: "${res.data.question}" is a great question!`,
-        });
-        dispatch({ type: RESET_FORM });
+        dispatch(setMessage(`Congrats: "${res.data.question}" is a great question!`));
+        dispatch(resetForm());
       })
       .catch((err) => {
-        dispatch({ type: SET_INFO_MESSAGE, payload: err.response.data.message });
+        dispatch(setMessage(err.response.data.message));
       });
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
