@@ -1,26 +1,26 @@
 // 👉 DO NOT CHANGE THIS FILE 👈
 // 👉 DO NOT CHANGE THIS FILE 👈
 // 👉 DO NOT CHANGE THIS FILE 👈
-import React from 'react'
-import { BrowserRouter, NavLink, Routes, Route } from 'react-router-dom'
-import Wheel from './Wheel'
-import Quiz from './Quiz'
-import Message from './Message'
-import Form from './Form'
+import React from "react";
+import { BrowserRouter, NavLink, Routes, Route } from "react-router-dom";
+import Wheel from "./Wheel";
+import Quiz from "./Quiz";
+import Message from "./Message";
+import Form from "./Form";
 
 // REDUX IMPORTS
-import { createStore, applyMiddleware, compose } from 'redux'
-import { Provider } from 'react-redux'
-import thunk from 'redux-thunk'
-import reducer from '../state/reducer'
+import { createStore, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import reducer from "../state/reducer";
 
 // REDUX STORE
-let store
+let store;
 export const resetStore = () => {
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-  store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)))
-}
-resetStore()
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+};
+resetStore();
 
 export default function App() {
   return (
@@ -30,9 +30,15 @@ export default function App() {
           <Message />
           <h1>Advanced State</h1>
           <nav>
-            <NavLink id="wheelLink" to="/">Wheel</NavLink>
-            <NavLink id="quizLink" to="/quiz">Quiz</NavLink>
-            <NavLink id="formLink" to="/quiz-new">Form</NavLink>
+            <NavLink id="wheelLink" to="/">
+              Wheel
+            </NavLink>
+            <NavLink id="quizLink" to="/quiz">
+              Quiz
+            </NavLink>
+            <NavLink id="formLink" to="/quiz-new">
+              Form
+            </NavLink>
           </nav>
           <Routes>
             <Route path="/" element={<Wheel />} />
@@ -42,5 +48,5 @@ export default function App() {
         </React.StrictMode>
       </BrowserRouter>
     </Provider>
-  )
+  );
 }

@@ -42,7 +42,7 @@ export function resetForm() {
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
-    dispatch(setQuiz(null));
+    dispatch(setQuiz(false));
     axios
       .get("http://localhost:9000/api/quiz/next")
       .then((res) => {

@@ -14,9 +14,10 @@ function Quiz(props) {
     postAnswer(quiz.quiz_id, selectedAnswer);
   };
 
-  useEffect(() => {
-    fetchQuiz();
-  }, []);
+  quiz === null &&
+    useEffect(() => {
+      fetchQuiz();
+    }, []);
 
   return (
     <div id="wrapper">
