@@ -4,9 +4,9 @@ import axios from "axios";
 import {
   MOVE_CLOCKWISE,
   MOVE_COUNTERCLOCKWISE,
-  RESET_QUIZ_STATE,
   SET_QUIZ_INTO_STATE,
   SET_SELECTED_ANSWER,
+  SET_INFO_MESSAGE,
 } from "./action-types";
 
 export function moveClockwise(nextId) {
@@ -32,7 +32,7 @@ export function resetForm() {}
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
-    dispatch({ type: RESET_QUIZ_STATE, payload: null });
+    dispatch({ type: SET_QUIZ_INTO_STATE, payload: null });
     axios
       .get("http://localhost:9000/api/quiz/next")
       .then((res) => {
@@ -46,8 +46,17 @@ export function fetchQuiz() {
     // - Dispatch an action to send the obtained quiz to its state
   };
 }
-export function postAnswer() {
+export function postAnswer(quiz_id, answer_id) {
   return function (dispatch) {
+    dispatch({ type: SET_SELECTED_ANSWER, payload: null });
+    axios
+      .post("http://localhost:9000/api/quiz/answer", { quiz_id, answer_id })
+      .then((res) => {
+        dispatch({ type: SET_INFO_MESSAGE, payload: res.data.message });
+      })
+      .catch((err) => {
+        dispatch({ type: SET_INFO_MESSAGE, payload: err.response.data.message });
+      });
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
