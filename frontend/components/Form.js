@@ -14,6 +14,17 @@ export function Form(props) {
     evt.preventDefault();
   };
 
+  const disabledHandler = () => {
+    if (
+      form.newQuestion.trim().length > 0 &&
+      form.newTrueAnswer.trim().length > 0 &&
+      form.newFalseAnswer.trim().length > 0
+    ) {
+      return null;
+    }
+    return "disabled";
+  };
+
   return (
     <form id="form" onSubmit={onSubmit}>
       <h2>Create New Quiz</h2>
@@ -38,7 +49,7 @@ export function Form(props) {
         placeholder="Enter false answer"
         value={form.newFalseAnswer}
       />
-      <button id="submitNewQuizBtn" disabled={"disabled"}>
+      <button id="submitNewQuizBtn" disabled={disabledHandler()}>
         Submit new quiz
       </button>
     </form>
