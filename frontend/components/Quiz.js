@@ -12,7 +12,6 @@ function Quiz(props) {
 
   const submitAnswerHandler = () => {
     postAnswer(quiz.quiz_id, selectedAnswer);
-    fetchQuiz();
   };
 
   useEffect(() => {

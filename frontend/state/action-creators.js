@@ -8,6 +8,7 @@ import {
   SET_SELECTED_ANSWER,
   SET_INFO_MESSAGE,
   INPUT_CHANGE,
+  RESET_FORM,
 } from "./action-types";
 
 export function moveClockwise(nextId) {
@@ -51,11 +52,12 @@ export function fetchQuiz() {
 }
 export function postAnswer(quiz_id, answer_id) {
   return function (dispatch) {
-    dispatch({ type: SET_SELECTED_ANSWER, payload: null });
     axios
       .post("http://localhost:9000/api/quiz/answer", { quiz_id, answer_id })
       .then((res) => {
+        dispatch({ type: SET_SELECTED_ANSWER, payload: null });
         dispatch({ type: SET_INFO_MESSAGE, payload: res.data.message });
+        dispatch(fetchQuiz());
       })
       .catch((err) => {
         dispatch({ type: SET_INFO_MESSAGE, payload: err.response.data.message });
@@ -66,8 +68,24 @@ export function postAnswer(quiz_id, answer_id) {
     // - Dispatch the fetching of the next quiz
   };
 }
-export function postQuiz() {
+export function postQuiz({ newQuestion, newTrueAnswer, newFalseAnswer }) {
   return function (dispatch) {
+    axios
+      .post("http://localhost:9000/api/quiz/new", {
+        question_text: newQuestion,
+        true_answer_text: newTrueAnswer,
+        false_answer_text: newFalseAnswer,
+      })
+      .then((res) => {
+        dispatch({
+          type: SET_INFO_MESSAGE,
+          payload: `Congrats: "${res.data.question}" is a great question!`,
+        });
+        dispatch({ type: RESET_FORM });
+      })
+      .catch((err) => {
+        dispatch({ type: SET_INFO_MESSAGE, payload: err.response.data.message });
+      });
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form

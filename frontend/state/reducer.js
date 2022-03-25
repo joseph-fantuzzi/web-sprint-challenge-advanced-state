@@ -7,6 +7,7 @@ import {
   SET_QUIZ_INTO_STATE,
   SET_INFO_MESSAGE,
   INPUT_CHANGE,
+  RESET_FORM,
 } from "./action-types";
 
 const initialWheelState = 0;
@@ -63,6 +64,8 @@ function form(state = initialFormState, action) {
         ...state,
         [action.payload.id]: action.payload.value,
       };
+    case RESET_FORM:
+      return initialFormState;
     default:
       return state;
   }
